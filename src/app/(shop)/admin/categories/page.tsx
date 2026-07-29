@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import CategorieForm from "./CategorieForm";
+import { MdLabel } from "react-icons/md";
 
 export default async function AdminCategories() {
   const categories = await prisma.category.findMany({
@@ -9,60 +10,59 @@ export default async function AdminCategories() {
 
   return (
     <div>
-      <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontWeight: 800, fontSize: "1.6rem", color: "#0f172a", letterSpacing: "-0.03em", margin: 0, marginBottom: 4 }}>Catégories</h1>
-        <p style={{ color: "#64748b", fontSize: "0.875rem", margin: 0 }}>{categories.length} catégorie{categories.length > 1 ? "s" : ""}</p>
+      <div className="page-header">
+        <div>
+          <h1 className="page-title">Catégories</h1>
+          <p className="page-subtitle">{categories.length} catégorie{categories.length > 1 ? "s" : ""}</p>
+        </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 340px", gap: 28, alignItems: "start" }}>
-
-        {/* Liste */}
-        <div className="card" style={{ overflow: "hidden" }}>
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <div className="grid grid-cols-[1fr_340px] gap-7 items-start">
+        <div className="card overflow-hidden">
+          <table className="w-full border-collapse">
             <thead>
-              <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+              <tr className="bg-slate-50 border-b border-slate-200">
                 {["Catégorie", "Slug", "Produits", "Actions"].map((h) => (
-                  <th key={h} style={{ padding: "12px 20px", textAlign: "left", fontSize: "0.72rem", fontWeight: 700, color: "#94a3b8", letterSpacing: "0.06em", textTransform: "uppercase" }}>{h}</th>
+                  <th key={h} className="th-admin">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {categories.map((c) => (
-                <tr key={c.id} className="admin-row" style={{ borderBottom: "1px solid #f1f5f9" }}>
-                  <td style={{ padding: "14px 20px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <div style={{ width: 36, height: 36, background: "linear-gradient(135deg, #ede9fe, #ddd6fe)", borderRadius: 8, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1rem" }}>🏷</div>
+                <tr key={c.id} className="admin-row border-b border-slate-100">
+                  <td className="px-5 py-3.5">
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-9 h-9 bg-linear-to-br from-violet-100 to-violet-200 rounded-lg flex items-center justify-center">
+                        <MdLabel size={18} className="text-violet-700" />
+                      </div>
                       <div>
-                        <p style={{ fontWeight: 600, fontSize: "0.875rem", color: "#0f172a", margin: 0 }}>{c.name}</p>
-                        {c.description && <p style={{ fontSize: "0.75rem", color: "#94a3b8", margin: 0 }}>{c.description}</p>}
+                        <p className="font-semibold text-sm text-slate-900 m-0">{c.name}</p>
+                        {c.description && <p className="text-xs text-slate-400 m-0">{c.description}</p>}
                       </div>
                     </div>
                   </td>
-                  <td style={{ padding: "14px 20px" }}>
-                    <code style={{ fontSize: "0.78rem", background: "#f1f5f9", color: "#475569", padding: "2px 8px", borderRadius: 4, fontFamily: "monospace" }}>{c.slug}</code>
+                  <td className="px-5 py-3.5">
+                    <code className="text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-mono">{c.slug}</code>
                   </td>
-                  <td style={{ padding: "14px 20px" }}>
-                    <span style={{ fontWeight: 700, fontSize: "0.9rem", color: "#4f46e5" }}>{c._count.products}</span>
-                    <span style={{ color: "#94a3b8", fontSize: "0.8rem" }}> produit{c._count.products > 1 ? "s" : ""}</span>
+                  <td className="px-5 py-3.5">
+                    <span className="font-bold text-[0.9rem] text-indigo-600">{c._count.products}</span>
+                    <span className="text-slate-400 text-xs"> produit{c._count.products > 1 ? "s" : ""}</span>
                   </td>
-                  <td style={{ padding: "14px 20px" }}>
+                  <td className="px-5 py-3.5">
                     <CategorieForm mode="edit" category={c} />
                   </td>
                 </tr>
               ))}
               {categories.length === 0 && (
-                <tr><td colSpan={4} style={{ textAlign: "center", padding: "48px", color: "#94a3b8" }}>Aucune catégorie créée.</td></tr>
+                <tr><td colSpan={4} className="text-center py-12 text-slate-400">Aucune catégorie créée.</td></tr>
               )}
             </tbody>
           </table>
         </div>
 
-        {/* Formulaire création */}
-        <div>
-          <div className="card" style={{ padding: 24 }}>
-            <h2 style={{ fontWeight: 700, fontSize: "1rem", color: "#0f172a", marginBottom: 20, paddingBottom: 16, borderBottom: "1px solid #e2e8f0" }}>Nouvelle catégorie</h2>
-            <CategorieForm mode="create" />
-          </div>
+        <div className="card p-6">
+          <h2 className="font-bold text-base text-slate-900 mb-5 pb-4 border-b border-slate-200">Nouvelle catégorie</h2>
+          <CategorieForm mode="create" />
         </div>
       </div>
     </div>

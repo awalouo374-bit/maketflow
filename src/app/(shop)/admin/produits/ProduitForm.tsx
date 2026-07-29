@@ -1,9 +1,21 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { MdSave, MdAddCircle, MdDelete } from "react-icons/md";
+import FormField from "@/components/shared/FormField";
+import ErrorAlert from "@/components/shared/ErrorAlert";
 
 type Category = { id: string; name: string };
-type Produit = { id?: string; name?: string; description?: string | null; price?: number; stock?: number; imageUrl?: string | null; categoryId?: string | null; published?: boolean };
+type Produit = {
+  id?: string;
+  name?: string;
+  description?: string | null;
+  price?: number;
+  stock?: number;
+  imageUrl?: string | null;
+  categoryId?: string | null;
+  published?: boolean;
+};
 
 export default function ProduitForm({ produit, categories }: { produit?: Produit; categories: Category[] }) {
   const router = useRouter();
@@ -37,80 +49,70 @@ export default function ProduitForm({ produit, categories }: { produit?: Produit
     router.push("/admin/produits"); router.refresh();
   }
 
-  const Field = ({ label, children }: { label: string; children: React.ReactNode }) => (
-    <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-      <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#374151", letterSpacing: "0.05em", textTransform: "uppercase" }}>{label}</span>
-      {children}
-    </label>
-  );
-
   return (
-    <form onSubmit={save} style={{ maxWidth: 720 }}>
-      {error && (
-        <div style={{ background: "#fef2f2", border: "1px solid #fecaca", borderRadius: 10, padding: "12px 16px", marginBottom: 20, display: "flex", gap: 8, alignItems: "center" }}>
-          <span>⚠️</span><span style={{ color: "#ef4444", fontSize: "0.875rem" }}>{error}</span>
-        </div>
-      )}
+    <form onSubmit={save} className="max-w-[720px]">
+      {error && <ErrorAlert message={error} />}
 
-      <div className="card" style={{ padding: 28, display: "flex", flexDirection: "column", gap: 22 }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-          <Field label="Nom du produit *">
-            <input className="input" value={form.name} onChange={(e) => set("name", e.target.value)} required placeholder="Ex: Smartphone Pro X" style={{ gridColumn: "span 2" }} />
-          </Field>
-          <Field label="Prix (€) *">
+      <div className="card p-7 flex flex-col gap-5">
+        <div className="grid grid-cols-2 gap-5">
+          <FormField label="Nom du produit *">
+            <input className="input col-span-2" value={form.name} onChange={(e) => set("name", e.target.value)} required placeholder="Ex: Smartphone Pro X" />
+          </FormField>
+          <FormField label="Prix (€) *">
             <input className="input" type="number" step="0.01" min="0" value={form.price} onChange={(e) => set("price", e.target.value)} required placeholder="0.00" />
-          </Field>
-          <Field label="Stock">
+          </FormField>
+          <FormField label="Stock">
             <input className="input" type="number" min="0" value={form.stock} onChange={(e) => set("stock", e.target.value)} placeholder="0" />
-          </Field>
+          </FormField>
         </div>
 
-        <Field label="Description">
-          <textarea className="input" value={form.description} onChange={(e) => set("description", e.target.value)} rows={3} placeholder="Décrivez votre produit..." style={{ resize: "vertical", fontFamily: "inherit" }} />
-        </Field>
+        <FormField label="Description">
+          <textarea className="input resize-y" value={form.description} onChange={(e) => set("description", e.target.value)} rows={3} placeholder="Décrivez votre produit..." />
+        </FormField>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-          <Field label="URL de l'image">
+        <div className="grid grid-cols-2 gap-5">
+          <FormField label="URL de l'image">
             <input className="input" value={form.imageUrl} onChange={(e) => set("imageUrl", e.target.value)} placeholder="https://..." />
-          </Field>
-          <Field label="Catégorie">
+          </FormField>
+          <FormField label="Catégorie">
             <select className="input" value={form.categoryId} onChange={(e) => set("categoryId", e.target.value)}>
               <option value="">— Sans catégorie —</option>
               {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
             </select>
-          </Field>
+          </FormField>
         </div>
 
-        {/* Aperçu image */}
         {form.imageUrl && (
-          <div style={{ borderRadius: 12, overflow: "hidden", border: "1px solid #e2e8f0", height: 160, background: "#f8fafc" }}>
-            <img src={form.imageUrl as string} alt="Aperçu" style={{ width: "100%", height: "100%", objectFit: "cover" }} onError={e => (e.currentTarget.style.display = "none")} />
+          <div className="rounded-xl overflow-hidden border border-slate-200 h-40 bg-slate-50">
+            <img src={form.imageUrl as string} alt="Aperçu" className="w-full h-full object-cover" onError={e => (e.currentTarget.style.display = "none")} />
           </div>
         )}
 
-        {/* Toggle publié */}
-        <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "14px 16px", background: "#f8fafc", borderRadius: 10, border: "1px solid #e2e8f0" }}>
-          <button type="button" onClick={() => set("published", !form.published)} style={{
-            width: 44, height: 24, borderRadius: 999, border: "none", cursor: "pointer", transition: "background .2s",
-            background: form.published ? "#4f46e5" : "#cbd5e1", position: "relative", flexShrink: 0,
-          }}>
-            <span style={{ position: "absolute", top: 3, left: form.published ? 23 : 3, width: 18, height: 18, background: "white", borderRadius: "50%", transition: "left .2s", boxShadow: "0 1px 3px rgba(0,0,0,.2)" }} />
+        <div className="flex items-center gap-3 px-4 py-3.5 bg-slate-50 rounded-[10px] border border-slate-200">
+          <button
+            type="button"
+            onClick={() => set("published", !form.published)}
+            className="toggle-track shrink-0"
+            style={{ background: form.published ? "#4f46e5" : "#cbd5e1" }}
+          >
+            <span className="toggle-thumb" style={{ left: form.published ? 23 : 3 }} />
           </button>
           <div>
-            <p style={{ fontWeight: 600, fontSize: "0.875rem", color: "#0f172a", margin: 0 }}>{form.published ? "Produit publié" : "Produit masqué"}</p>
-            <p style={{ fontSize: "0.75rem", color: "#64748b", margin: 0 }}>{form.published ? "Visible dans la boutique" : "Invisible pour les clients"}</p>
+            <p className="font-semibold text-sm text-slate-900 m-0">{form.published ? "Produit publié" : "Produit masqué"}</p>
+            <p className="text-xs text-slate-500 m-0">{form.published ? "Visible dans la boutique" : "Invisible pour les clients"}</p>
           </div>
         </div>
       </div>
 
-      {/* Actions */}
-      <div style={{ display: "flex", gap: 12, marginTop: 20 }}>
-        <button type="submit" disabled={saving} className="btn-primary" style={{ padding: "11px 24px" }}>
-          {saving ? "Enregistrement..." : isEdit ? "💾 Enregistrer" : "✨ Créer le produit"}
+      <div className="flex gap-3 mt-5">
+        <button type="submit" disabled={saving} className="btn-primary py-3 px-6 inline-flex items-center gap-1.5">
+          {saving ? "Enregistrement..." : isEdit ? <><MdSave size={16} /> Enregistrer</> : <><MdAddCircle size={16} /> Créer le produit</>}
         </button>
-        <button type="button" onClick={() => router.back()} className="btn-secondary" style={{ padding: "11px 20px" }}>Annuler</button>
+        <button type="button" onClick={() => router.back()} className="btn-secondary py-3 px-5">Annuler</button>
         {isEdit && (
-          <button type="button" onClick={del} className="btn-danger" style={{ padding: "11px 20px", marginLeft: "auto" }}>🗑 Supprimer</button>
+          <button type="button" onClick={del} className="btn-danger py-3 px-5 ml-auto inline-flex items-center gap-1.5">
+            <MdDelete size={16} /> Supprimer
+          </button>
         )}
       </div>
     </form>

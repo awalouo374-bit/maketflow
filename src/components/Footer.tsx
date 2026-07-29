@@ -1,76 +1,70 @@
 import Link from "next/link";
 import Image from "next/image";
+import { MdLocalShipping, MdLoop, MdLock, MdSupportAgent } from "react-icons/md";
+import { IconType } from "react-icons";
+
+type Advantage = { icon: IconType; title: string; sub: string };
+
+const advantages: Advantage[] = [
+  { icon: MdLocalShipping, title: "Livraison gratuite", sub: "dès 50€" },
+  { icon: MdLoop,          title: "Retours gratuits",   sub: "30 jours" },
+  { icon: MdLock,          title: "Paiement sécurisé",  sub: "100%" },
+  { icon: MdSupportAgent,  title: "Support",             sub: "7j/7" },
+];
 
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer style={{ background: "#0d1a45", color: "#94a3b8" }}>
-      <div style={{ height: 4, background: "linear-gradient(90deg,#f97316,#ea580c,#f97316)" }} />
+    <footer className="bg-[#0d1a45] text-slate-400">
+      <div className="h-1 bg-linear-to-r from-orange-500 via-orange-600 to-orange-500" />
 
-      <style>{`
-        .footer-link { color: #94a3b8; text-decoration: none; font-size: 0.875rem; transition: color .15s; }
-        .footer-link:hover { color: #f97316; }
-        .footer-legal { font-size: 0.8rem; cursor: pointer; color: #94a3b8; transition: color .15s; }
-        .footer-legal:hover { color: #f97316; }
-        .footer-grid { display: grid; gap: 32px; grid-template-columns: 1fr; margin-bottom: 32px; }
-        @media (min-width: 640px) { .footer-grid { grid-template-columns: 2fr 1fr; gap: 36px; } }
-        @media (min-width: 1024px) { .footer-grid { grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 44px; } }
-        .footer-bottom { display: flex; flex-direction: column; gap: 16px; align-items: center; text-align: center; }
-        @media (min-width: 640px) { .footer-bottom { flex-direction: row; justify-content: space-between; text-align: left; } }
-      `}</style>
-
-      <div style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 16px 24px" }}>
+      <div className="container py-10 pb-6">
         <div className="footer-grid">
 
-          {/* Brand */}
           <div>
-            <div style={{ marginBottom: 18 }}>
-              <Image src="/Logo3.png" alt="MarketFlow" width={150} height={56} style={{ objectFit: "contain" }} />
+            <div className="mb-4">
+              <Image src="/Logo3.png" alt="MarketFlow" width={150} height={56} className="object-contain" />
             </div>
-            <p style={{ fontSize: "0.875rem", lineHeight: 1.75, maxWidth: 260 }}>
+            <p className="text-sm leading-7 max-w-[260px]">
               Votre marketplace de confiance. Des milliers de produits, livrés rapidement et en toute sécurité.
             </p>
-            <p style={{ fontStyle: "italic", color: "#f97316", fontSize: "0.85rem", marginTop: 10 }}>
+            <p className="italic text-orange-500 text-sm mt-2.5">
               "Achetez, Vendez, Grandissez"
             </p>
           </div>
 
-          {/* Boutique */}
           <div>
-            <p style={{ color: "white", fontWeight: 700, fontSize: "0.82rem", marginBottom: 18, letterSpacing: "0.06em", textTransform: "uppercase" }}>Boutique</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <p className="text-white font-bold text-xs mb-4 tracking-widest uppercase">Boutique</p>
+            <div className="flex flex-col gap-3">
               <Link href="/" className="footer-link">Tous les produits</Link>
               <Link href="/panier" className="footer-link">Mon panier</Link>
               <Link href="/commandes" className="footer-link">Mes commandes</Link>
             </div>
           </div>
 
-          {/* Compte */}
           <div>
-            <p style={{ color: "white", fontWeight: 700, fontSize: "0.82rem", marginBottom: 18, letterSpacing: "0.06em", textTransform: "uppercase" }}>Compte</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <p className="text-white font-bold text-xs mb-4 tracking-widest uppercase">Compte</p>
+            <div className="flex flex-col gap-3">
               <Link href="/login" className="footer-link">Se connecter</Link>
             </div>
           </div>
 
-          {/* Avantages */}
           <div>
-            <p style={{ color: "white", fontWeight: 700, fontSize: "0.82rem", marginBottom: 18, letterSpacing: "0.06em", textTransform: "uppercase" }}>Pourquoi nous</p>
-            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              {[["🚚","Livraison gratuite dès 50€"],["↩️","Retours sous 30 jours"],["🔒","Paiement sécurisé"],["📞","Support 7j/7"]].map(([icon,text]) => (
-                <div key={text as string} style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontSize: "0.9rem" }}>{icon}</span>
-                  <span style={{ fontSize: "0.82rem" }}>{text}</span>
+            <p className="text-white font-bold text-xs mb-4 tracking-widest uppercase">Pourquoi nous</p>
+            <div className="flex flex-col gap-2.5">
+              {advantages.map(({ icon: Icon, title, sub }) => (
+                <div key={title} className="flex items-center gap-2">
+                  <Icon size={18} className="text-orange-500 shrink-0" />
+                  <span className="text-xs">{title} — {sub}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="footer-bottom" style={{ borderTop: "1px solid rgba(255,255,255,.08)", paddingTop: 20 }}>
-          <p style={{ fontSize: "0.8rem", margin: 0 }}>© {year} MarketFlow. Tous droits réservés.</p>
-          <div style={{ display: "flex", gap: 16, flexWrap: "wrap", justifyContent: "center" }}>
+        <div className="footer-bottom border-t border-white/10 pt-5">
+          <p className="text-xs m-0">© {year} MarketFlow. Tous droits réservés.</p>
+          <div className="flex gap-4 flex-wrap justify-center">
             <span className="footer-legal">Confidentialité</span>
             <span className="footer-legal">CGV</span>
             <span className="footer-legal">Mentions légales</span>

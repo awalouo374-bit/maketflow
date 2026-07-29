@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import { MdInventory2, MdEdit } from "react-icons/md";
+import EmptyState from "@/components/shared/EmptyState";
 
 export default async function AdminProduits() {
   const produits = await prisma.product.findMany({
@@ -9,68 +11,65 @@ export default async function AdminProduits() {
 
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 28 }}>
+      <div className="page-header">
         <div>
-          <h1 style={{ fontWeight: 800, fontSize: "1.6rem", color: "#0f172a", letterSpacing: "-0.03em", margin: 0, marginBottom: 4 }}>Produits</h1>
-          <p style={{ color: "#64748b", fontSize: "0.875rem", margin: 0 }}>{produits.length} produit{produits.length > 1 ? "s" : ""} au total</p>
+          <h1 className="page-title">Produits</h1>
+          <p className="page-subtitle">{produits.length} produit{produits.length > 1 ? "s" : ""} au total</p>
         </div>
-        <Link href="/admin/produits/nouveau" className="btn-primary" style={{ textDecoration: "none" }}>
-          + Nouveau produit
-        </Link>
+        <Link href="/admin/produits/nouveau" className="btn-primary no-underline">+ Nouveau produit</Link>
       </div>
 
-      <div className="card" style={{ overflow: "hidden" }}>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+      <div className="card overflow-hidden">
+        <table className="w-full border-collapse">
           <thead>
-            <tr style={{ background: "#f8fafc", borderBottom: "1px solid #e2e8f0" }}>
+            <tr className="bg-slate-50 border-b border-slate-200">
               {["Produit", "Catégorie", "Prix", "Stock", "Statut", "Actions"].map((h) => (
-                <th key={h} style={{ padding: "12px 20px", textAlign: "left", fontSize: "0.72rem", fontWeight: 700, color: "#94a3b8", letterSpacing: "0.06em", textTransform: "uppercase" }}>{h}</th>
+                <th key={h} className="th-admin">{h}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             {produits.map((p) => (
-              <tr key={p.id} className="admin-row" style={{ borderBottom: "1px solid #f1f5f9" }}>
-                <td style={{ padding: "14px 20px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                    <div style={{ width: 42, height: 42, borderRadius: 10, background: "linear-gradient(135deg,#f0f4ff,#fff4ed)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.2rem", overflow: "hidden", flexShrink: 0 }}>
-                      {p.imageUrl ? <img src={p.imageUrl} style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : "📦"}
+              <tr key={p.id} className="admin-row border-b border-slate-100">
+                <td className="px-5 py-3.5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-[42px] h-[42px] rounded-[10px] bg-linear-to-br from-[#f0f4ff] to-orange-soft flex items-center justify-center overflow-hidden shrink-0">
+                      {p.imageUrl ? <img src={p.imageUrl} className="w-full h-full object-cover" /> : <MdInventory2 size={20} className="text-slate-300" />}
                     </div>
                     <div>
-                      <p style={{ fontWeight: 600, fontSize: "0.875rem", color: "#0f172a", margin: 0, marginBottom: 2 }}>{p.name}</p>
-                      <p style={{ fontSize: "0.75rem", color: "#94a3b8", margin: 0 }}>#{p.id.slice(-6).toUpperCase()}</p>
+                      <p className="font-semibold text-sm text-slate-900 m-0 mb-0.5">{p.name}</p>
+                      <p className="text-xs text-slate-400 m-0">#{p.id.slice(-6).toUpperCase()}</p>
                     </div>
                   </div>
                 </td>
-                <td style={{ padding: "14px 20px" }}>
+                <td className="px-5 py-3.5">
                   {p.category
-                    ? <span style={{ background: "#e8ecf8", color: "#1a2d6b", padding: "3px 10px", borderRadius: 999, fontSize: "0.75rem", fontWeight: 600 }}>{p.category.name}</span>
-                    : <span style={{ color: "#cbd5e1", fontSize: "0.85rem" }}>—</span>}
+                    ? <span className="bg-navy-soft text-navy px-2.5 py-0.5 rounded-full text-xs font-semibold">{p.category.name}</span>
+                    : <span className="text-slate-300 text-sm">—</span>}
                 </td>
-                <td style={{ padding: "14px 20px", fontWeight: 700, color: "#f97316", fontSize: "0.9rem" }}>{p.price.toFixed(2)} €</td>
-                <td style={{ padding: "14px 20px" }}>
-                  <span style={{ fontWeight: 600, fontSize: "0.875rem", color: p.stock > 10 ? "#059669" : p.stock > 0 ? "#d97706" : "#ef4444" }}>
+                <td className="px-5 py-3.5 font-bold text-orange-500 text-[0.9rem]">{p.price.toFixed(2)} €</td>
+                <td className="px-5 py-3.5">
+                  <span className={`font-semibold text-sm ${p.stock > 10 ? "text-emerald-600" : p.stock > 0 ? "text-amber-600" : "text-red-500"}`}>
                     {p.stock > 0 ? p.stock : "Épuisé"}
                   </span>
                 </td>
-                <td style={{ padding: "14px 20px" }}>
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "3px 10px", borderRadius: 999, fontSize: "0.75rem", fontWeight: 600, background: p.published ? "#ecfdf5" : "#f1f5f9", color: p.published ? "#065f46" : "#64748b" }}>
-                    <span style={{ width: 6, height: 6, borderRadius: "50%", background: p.published ? "#10b981" : "#cbd5e1", display: "inline-block" }} />
+                <td className="px-5 py-3.5">
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold ${p.published ? "bg-emerald-50 text-emerald-800" : "bg-slate-100 text-slate-500"}`}>
+                    <span className={`w-1.5 h-1.5 rounded-full inline-block ${p.published ? "bg-emerald-500" : "bg-slate-300"}`} />
                     {p.published ? "Publié" : "Masqué"}
                   </span>
                 </td>
-                <td style={{ padding: "14px 20px" }}>
-                  <Link href={`/admin/produits/${p.id}`} className="admin-edit-btn">✏️ Modifier</Link>
+                <td className="px-5 py-3.5">
+                  <Link href={`/admin/produits/${p.id}`} className="admin-edit-btn">
+                    <MdEdit size={14} /> Modifier
+                  </Link>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
         {produits.length === 0 && (
-          <div style={{ textAlign: "center", padding: "60px 20px", color: "#94a3b8" }}>
-            <div style={{ fontSize: "3rem", marginBottom: 12 }}>📦</div>
-            <p style={{ fontWeight: 500 }}>Aucun produit. Créez votre premier produit !</p>
-          </div>
+          <EmptyState icon={MdInventory2} title="Aucun produit" description="Créez votre premier produit !" />
         )}
       </div>
     </div>

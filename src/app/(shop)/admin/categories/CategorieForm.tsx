@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { MdEdit, MdDelete, MdClose } from "react-icons/md";
 
 type Category = { id: string; name: string; description?: string | null; imageUrl?: string | null };
 type Props = { mode: "create" | "edit"; category?: Category };
@@ -30,39 +31,47 @@ export default function CategorieForm({ mode, category }: Props) {
 
   if (mode === "edit") return (
     <>
-      <div style={{ display: "flex", gap: 8 }}>
-        <button onClick={() => setOpen(true)} style={{ background: "none", border: "none", cursor: "pointer", color: "#4f46e5", fontSize: "0.8rem", fontWeight: 600, padding: "4px 8px", borderRadius: 6, transition: "background .15s" }}
-          onMouseEnter={e => (e.currentTarget.style.background = "#ede9fe")} onMouseLeave={e => (e.currentTarget.style.background = "none")}>
-          ✏️ Modifier
+      <div className="flex gap-2">
+        <button
+          onClick={() => setOpen(true)}
+          className="inline-flex items-center gap-1 bg-transparent border-none cursor-pointer text-indigo-600 text-xs font-semibold px-2 py-1 rounded-md hover:bg-indigo-50 transition-colors"
+        >
+          <MdEdit size={14} /> Modifier
         </button>
-        <button onClick={del} style={{ background: "none", border: "none", cursor: "pointer", color: "#ef4444", fontSize: "0.8rem", fontWeight: 600, padding: "4px 8px", borderRadius: 6, transition: "background .15s" }}
-          onMouseEnter={e => (e.currentTarget.style.background = "#fef2f2")} onMouseLeave={e => (e.currentTarget.style.background = "none")}>
-          🗑
+        <button
+          onClick={del}
+          className="inline-flex items-center bg-transparent border-none cursor-pointer text-red-500 text-xs font-semibold px-2 py-1 rounded-md hover:bg-red-50 transition-colors"
+        >
+          <MdDelete size={16} />
         </button>
       </div>
 
       {open && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(15,23,42,.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100, backdropFilter: "blur(4px)" }}
-          onClick={(e) => e.target === e.currentTarget && setOpen(false)}>
-          <div className="card" style={{ padding: 32, width: "100%", maxWidth: 420, boxShadow: "0 25px 50px -12px rgba(0,0,0,.25)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24 }}>
-              <h2 style={{ fontWeight: 700, fontSize: "1.1rem", color: "#0f172a", margin: 0 }}>Modifier la catégorie</h2>
-              <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "1.2rem", color: "#94a3b8", padding: 4 }}>✕</button>
+        <div
+          className="fixed inset-0 bg-slate-900/50 flex items-center justify-center z-100 backdrop-blur-sm"
+          onClick={(e) => e.target === e.currentTarget && setOpen(false)}
+        >
+          <div className="card p-8 w-full max-w-[420px] shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h2 className="font-bold text-[1.1rem] text-slate-900 m-0">Modifier la catégorie</h2>
+              <button onClick={() => setOpen(false)} className="bg-transparent border-none cursor-pointer text-slate-400 p-1 flex">
+                <MdClose size={20} />
+              </button>
             </div>
-            <form onSubmit={save} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-              <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#374151", letterSpacing: "0.05em", textTransform: "uppercase" }}>Nom *</span>
+            <form onSubmit={save} className="flex flex-col gap-4">
+              <label className="flex flex-col gap-1.5">
+                <span className="field-label">Nom *</span>
                 <input className="input" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Nom de la catégorie" />
               </label>
-              <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#374151", letterSpacing: "0.05em", textTransform: "uppercase" }}>Description</span>
-                <textarea className="input" value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder="Description optionnelle" style={{ resize: "none", fontFamily: "inherit" }} />
+              <label className="flex flex-col gap-1.5">
+                <span className="field-label">Description</span>
+                <textarea className="input resize-none" value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder="Description optionnelle" />
               </label>
-              <div style={{ display: "flex", gap: 10, marginTop: 4 }}>
-                <button type="submit" disabled={saving} className="btn-primary" style={{ flex: 1, padding: "10px" }}>
+              <div className="flex gap-2.5 mt-1">
+                <button type="submit" disabled={saving} className="btn-primary flex-1 py-2.5">
                   {saving ? "Enregistrement..." : "Enregistrer"}
                 </button>
-                <button type="button" onClick={() => setOpen(false)} className="btn-secondary" style={{ padding: "10px 18px" }}>Annuler</button>
+                <button type="button" onClick={() => setOpen(false)} className="btn-secondary py-2.5 px-4">Annuler</button>
               </div>
             </form>
           </div>
@@ -71,18 +80,17 @@ export default function CategorieForm({ mode, category }: Props) {
     </>
   );
 
-  // Mode création
   return (
-    <form onSubmit={save} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-      <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#374151", letterSpacing: "0.05em", textTransform: "uppercase" }}>Nom *</span>
+    <form onSubmit={save} className="flex flex-col gap-3.5">
+      <label className="flex flex-col gap-1.5">
+        <span className="field-label">Nom *</span>
         <input className="input" value={name} onChange={(e) => setName(e.target.value)} required placeholder="Ex: Électronique" />
       </label>
-      <label style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-        <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "#374151", letterSpacing: "0.05em", textTransform: "uppercase" }}>Description</span>
-        <textarea className="input" value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder="Description optionnelle" style={{ resize: "none", fontFamily: "inherit" }} />
+      <label className="flex flex-col gap-1.5">
+        <span className="field-label">Description</span>
+        <textarea className="input resize-none" value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder="Description optionnelle" />
       </label>
-      <button type="submit" disabled={saving} className="btn-primary" style={{ padding: "10px" }}>
+      <button type="submit" disabled={saving} className="btn-primary py-2.5">
         {saving ? "Création..." : "+ Créer la catégorie"}
       </button>
     </form>

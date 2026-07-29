@@ -5,11 +5,9 @@ import { getSessionUser } from "@/lib/session";
 export default async function ShopLayout({ children }: { children: React.ReactNode }) {
   const user = await getSessionUser();
   return (
-    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+    <div className="flex flex-col min-h-screen">
       <Navbar role={user?.role} userName={user?.name} />
-      <div style={{ flex: 1 }}>
-        {children}
-      </div>
+      <div className="flex-1">{children}</div>
       <Footer />
     </div>
   );
