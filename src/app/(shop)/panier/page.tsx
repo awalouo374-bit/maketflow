@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { MdShoppingCart, MdInventory2, MdDelete, MdLocalShipping, MdArrowForward } from "react-icons/md";
+import { MdShoppingCart, MdInventory2, MdDelete, MdLocalShipping, MdArrowForward, MdLock } from "react-icons/md";
 import EmptyState from "@/components/shared/EmptyState";
 
 type Item = {
