@@ -3,82 +3,70 @@ import Image from "next/image";
 import { MdLocalShipping, MdLoop, MdLock, MdSupportAgent } from "react-icons/md";
 import { IconType } from "react-icons";
 
-type Advantage = { icon: IconType; title: string; sub: string };
-
-const advantages: Advantage[] = [
+type Guarantee = { icon: IconType; title: string; sub: string };
+const guarantees: Guarantee[] = [
   { icon: MdLocalShipping, title: "Livraison gratuite", sub: "dès 50€" },
   { icon: MdLoop,          title: "Retours gratuits",   sub: "30 jours" },
   { icon: MdLock,          title: "Paiement sécurisé",  sub: "100%" },
-  { icon: MdSupportAgent,  title: "Support",             sub: "7j/7" },
+  { icon: MdSupportAgent,  title: "Support 7j/7",       sub: "Réactif" },
 ];
 
 export default function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="bg-[#0b1740] text-slate-400">
-      <div className="h-1 bg-linear-to-r from-orange-600 via-orange-500 to-orange-400" />
-
-      <div className="container py-14 pb-8">
+    <footer className="bg-[#222] text-[#999] mobile-pb">
+      <div className="bg-slate-900">
+        <div className="container">
+          <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-[#333]">
+            {guarantees.map(({ icon: Icon, title, sub }) => (
+              <div key={title} className="flex items-center gap-3 px-4 py-4">
+                <Icon size={20} className="text-[#ff6000] shrink-0" />
+                <div>
+                  <p className="text-white text-xs font-semibold m-0 leading-none mb-0.5">{title}</p>
+                  <p className="text-[#666] text-xs m-0">{sub}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="container py-10">
         <div className="footer-grid">
-
           <div>
-            <div className="mb-6">
-              <Image src="/Logo3.png" alt="MarketFlow" width={150} height={52} className="object-contain brightness-90" />
-            </div>
-            <p className="text-sm leading-7 text-slate-400 max-w-[280px]">
-              Votre marketplace de confiance. Des milliers de produits sélectionnés, livrés rapidement et en toute sécurité.
-            </p>
-            <p className="italic text-orange-400/80 text-sm mt-4 font-medium">
-              "Achetez, Vendez, Grandissez"
-            </p>
-
-            <div className="flex gap-3 mt-6">
-              {["f", "in", "tw"].map((s) => (
-                <div key={s} className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-xs text-slate-400 hover:bg-white/10 hover:text-white cursor-pointer transition-all uppercase font-bold">
-                  {s}
-                </div>
+            <div className="mb-4 opacity-80"><Image src="/Logo3.png" alt="MarketFlow" width={110} height={40} className="object-contain" /></div>
+            <p className="text-[0.82rem] leading-6 text-[#888] max-w-[260px] mb-4">Votre marketplace de confiance. Des milliers de produits livrés rapidement et en toute sécurité.</p>
+            <div className="flex gap-2 mt-4">
+              {["f","in","tw"].map((s) => (
+                <div key={s} className="w-7 h-7 rounded bg-[#333] flex items-center justify-center text-[0.65rem] text-[#888] hover:bg-[#ff6000] hover:text-white cursor-pointer transition-all uppercase font-bold">{s}</div>
               ))}
             </div>
           </div>
-
           <div>
-            <p className="text-white font-bold text-xs mb-5 tracking-widest uppercase">Boutique</p>
-            <div className="flex flex-col gap-3">
-              <Link href="/" className="footer-link hover:pl-1 transition-all">Tous les produits</Link>
-              <Link href="/panier" className="footer-link hover:pl-1 transition-all">Mon panier</Link>
-              <Link href="/commandes" className="footer-link hover:pl-1 transition-all">Mes commandes</Link>
+            <p className="text-white text-xs font-bold mb-4 tracking-widest uppercase">Boutique</p>
+            <div className="flex flex-col gap-2.5">
+              <Link href="/" className="footer-link">Tous les produits</Link>
+              <Link href="/panier" className="footer-link">Mon panier</Link>
+              <Link href="/commandes" className="footer-link">Mes commandes</Link>
             </div>
           </div>
-
           <div>
-            <p className="text-white font-bold text-xs mb-5 tracking-widest uppercase">Compte</p>
-            <div className="flex flex-col gap-3">
-              <Link href="/login" className="footer-link hover:pl-1 transition-all">Se connecter</Link>
-              <Link href="/login" className="footer-link hover:pl-1 transition-all">Créer un compte</Link>
+            <p className="text-white text-xs font-bold mb-4 tracking-widest uppercase">Compte</p>
+            <div className="flex flex-col gap-2.5">
+              <Link href="/login" className="footer-link">Se connecter</Link>
+              <Link href="/login" className="footer-link">Créer un compte</Link>
             </div>
           </div>
-
           <div>
-            <p className="text-white font-bold text-xs mb-5 tracking-widest uppercase">Nos garanties</p>
-            <div className="flex flex-col gap-4">
-              {advantages.map(({ icon: Icon, title, sub }) => (
-                <div key={title} className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-lg bg-orange-500/15 flex items-center justify-center shrink-0">
-                    <Icon size={16} className="text-orange-400" />
-                  </div>
-                  <div>
-                    <p className="text-slate-200 text-xs font-semibold leading-none mb-0.5">{title}</p>
-                    <p className="text-slate-500 text-xs">{sub}</p>
-                  </div>
-                </div>
-              ))}
+            <p className="text-white text-xs font-bold mb-4 tracking-widest uppercase">Service client</p>
+            <div className="flex flex-col gap-2.5">
+              <span className="text-[0.82rem] text-[#888]">Lun–Ven : 9h–18h</span>
+              <span className="text-[#ff6000] font-semibold text-sm">support@marketflow.fr</span>
             </div>
           </div>
         </div>
-
-        <div className="footer-bottom border-t border-white/[.07] pt-6">
-          <p className="text-xs text-slate-500 m-0">© {year} MarketFlow. Tous droits réservés.</p>
-          <div className="flex gap-5 flex-wrap justify-center">
+        <div className="footer-bottom border-t border-[#333] pt-5">
+          <p className="text-[0.72rem] text-[#555] m-0">© {year} MarketFlow. Tous droits réservés.</p>
+          <div className="flex gap-4 flex-wrap justify-center">
             <span className="footer-legal">Confidentialité</span>
             <span className="footer-legal">CGV</span>
             <span className="footer-legal">Mentions légales</span>

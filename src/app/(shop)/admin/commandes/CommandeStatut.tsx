@@ -6,10 +6,10 @@ type Statut = { value: string; label: string; color: string; bg: string };
 
 const statuts: Statut[] = [
   { value: "PENDING",   label: "En attente",  color: "#92400e", bg: "#fffbeb" },
-  { value: "CONFIRMED", label: "Confirmée",   color: "#1d4ed8", bg: "#eff6ff" },
-  { value: "SHIPPED",   label: "Expédiée",    color: "#6d28d9", bg: "#f5f3ff" },
-  { value: "DELIVERED", label: "Livrée",      color: "#065f46", bg: "#ecfdf5" },
-  { value: "CANCELLED", label: "Annulée",     color: "#991b1b", bg: "#fef2f2" },
+  { value: "CONFIRMED", label: "Confirmée",   color: "#0958d9", bg: "#e6f7ff" },
+  { value: "SHIPPED",   label: "Expédiée",    color: "#722ed1", bg: "#f9f0ff" },
+  { value: "DELIVERED", label: "Livrée",      color: "#389e0d", bg: "#f6ffed" },
+  { value: "CANCELLED", label: "Annulée",     color: "#cf1322", bg: "#fff1f0" },
 ];
 
 type Props = { orderId: string; current: string };

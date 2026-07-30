@@ -4,11 +4,12 @@ import { getSessionUser } from "@/lib/session";
 
 export default async function ShopLayout({ children }: { children: React.ReactNode }) {
   const user = await getSessionUser();
+  const isAdmin = user?.role === "ADMIN";
   return (
     <div className="flex flex-col min-h-screen">
-      <Navbar role={user?.role} userName={user?.name} />
+      {!isAdmin && <Navbar role={user?.role} userName={user?.name} />}
       <div className="flex-1">{children}</div>
-      <Footer />
+      {!isAdmin && <Footer />}
     </div>
   );
 }
